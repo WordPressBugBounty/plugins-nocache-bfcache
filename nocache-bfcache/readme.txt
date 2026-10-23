@@ -2,7 +2,7 @@
 
 Contributors: westonruter, wordpressdotorg, performanceteam
 Tags: performance, caching
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -35,7 +35,7 @@ When authenticating to WordPress, a “bfcache session token” cookie is set al
 
 Since JavaScript is required to invalidate cached pages, the login form is extended to pass along whether scripting is enabled. Only when JS is enabled will the `no-store` directive be omitted from the `Cache-Control` response header. This ensures that users with JavaScript turned off will retain the privacy protection after logging out. Lastly, `no-store` is also only omitted if the user checked the “Remember Me” checkbox on the login form. Since it is highly unlikely a user on a shared computer would have checked this checkbox, this provides yet an additional safeguard (which may in the end prove excessive). A ✨ emoji is displayed next to the checkbox in a button that opens a popover that promotes the capability. If you want to opt out of this opt-in (and the sparkle) so that all logged-in users get bfcache, you can use the `nocache_bfcache_use_remember_me_as_opt_in` filter which you can use in a custom plugin or your theme:
 
-<pre>add_filter( 'nocache_bfcache_use_remember_me_as_opt_in', '__return_false' );</pre>
+<pre>add_filter( &#039;nocache_bfcache_use_remember_me_as_opt_in&#039;, &#039;__return_false&#039; );</pre>
 
 When this plugin strips out the `no-store` directive, it also ensures that the [`private` directive](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#private) is sent in its place: “The `private` response directive indicates that the response can be stored only in a private cache (e.g., local caches in browsers).” WordPress is already sending `private` as of [#57627](https://core.trac.wordpress.org/ticket/57627). This directive ensures that proxies do not cache authenticated pages. In addition to ensuring `private` is present, this plugin also adds `no-cache`, `max-age=0`, and `must-revalidate` while ensuring `public` is removed, all to further guard against any misconfigured proxy from caching the private response.
 
@@ -128,7 +128,7 @@ Pantheon sites have a [must-use plugin](https://github.com/pantheon-systems/pant
 <pre>// Workaround for Pantheon MU plugin sending Cache-Control: no-store which prevents bfcache.
 // See https://github.com/pantheon-systems/pantheon-mu-plugin/pull/94
 add_filter(
-	'pantheon_skip_cache_control',
+	&#039;pantheon_skip_cache_control&#039;,
 	static function (): bool {
 		return is_admin() || is_user_logged_in();
 	}
